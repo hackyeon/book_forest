@@ -1,5 +1,7 @@
+import 'package:book_forest/screens/post_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'package:book_forest/utils/preference_util.dart' as pref;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,11 +16,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToLogin() async {
-    await Future.delayed(Duration(seconds: 2), () {});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    var email = await pref.getString(pref.KEY_LOGIN_EMAIL);
+    if(email.isEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => PostListScreen()),
+      );
+    }
   }
 
   @override
