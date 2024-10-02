@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PostDetailScreen extends StatelessWidget {
-  final int postId;
-  PostDetailScreen({required this.postId});
+  final dynamic post;
+  PostDetailScreen({required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,11 @@ class PostDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '게시글 제목 $postId',
+              post['title'],
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
-            Text('게시글 내용 $postId'),
+            Text(post['content']),
           ],
         ),
       ),

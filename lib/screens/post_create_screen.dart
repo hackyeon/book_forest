@@ -1,4 +1,8 @@
+import 'package:book_forest/utils/toast_util.dart';
 import 'package:flutter/material.dart';
+import 'package:book_forest/utils/preference_util.dart' as pref;
+import 'package:book_forest/api/api.dart' as api;
+import 'package:book_forest/api/url.dart' as url;
 
 class PostCreateScreen extends StatefulWidget {
   @override
@@ -9,11 +13,20 @@ class _PostCreateScreenState extends State<PostCreateScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
 
-  _submitPost() {
+  _submitPost() async {
     if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
-      // 에러 처리
+      toast("좀 뭐라도 써라 ㅡㅡ");
     } else {
       // 게시글 전송 로직
+      var email = await pref.getString(pref.KEY_LOGIN_EMAIL);
+      var json = {'email': email, 'title': _titleController.text, 'content': _contentController.text};
+      var response = await api.request(url.POST_CREATE, json);
+      if(response['result'] == 0) {
+        toast('게시글 작성 성공');
+      } else {
+        toast('게시글 작성 실패');
+      }
+      Navigator.pop(context);
     }
   }
 
