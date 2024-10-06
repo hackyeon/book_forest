@@ -47,8 +47,18 @@ class _PostListScreenState extends State<PostListScreen> {
         itemCount: posts.length,  // API에서 받은 게시글 개수
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(posts[index]['title']),  // 게시글 제목 표시
-            subtitle: Text(posts[index]['content']),  // 게시글 내용 표시
+            leading: Text(posts[index]['idx'].toString()),  // 왼쪽에 idx 표시
+            trailing: Text(posts[index]['date']),  // 오른쪽에 date 표시
+            title: Text(
+              posts[index]['title'],
+              maxLines: 1,  // 타이틀을 한 줄로 제한
+              overflow: TextOverflow.ellipsis,  // 내용이 길면 ...으로 표시
+            ),
+            subtitle: Text(
+              posts[index]['content'],
+              maxLines: 1,  // 내용을 한 줄로 제한
+              overflow: TextOverflow.ellipsis,  // 내용이 길면 ...으로 표시
+            ),
             onTap: () {
               Navigator.push(
                 context,
