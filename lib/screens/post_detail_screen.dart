@@ -14,14 +14,17 @@ class PostDetailScreen extends StatefulWidget {
 }
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
-  late Map<String, dynamic> post;  // 게시글 데이터를 저장할 변수
-  bool isLoading = true;       // 로딩 상태 관리
-  bool isOwner = false;            // 사용자가 게시글 작성자인지 확인
+  late Map<String, dynamic> post; // 게시글 데이터를 저장할 변수
+  List<dynamic> comments = [];
+  bool isLoading = true; // 로딩 상태 관리
+  bool isOwner = false; // 사용자가 게시글 작성자인지 확인
+  final TextEditingController _commentController =
+      TextEditingController(); // 댓글 입력 컨트롤러
 
   @override
   void initState() {
     super.initState();
-    fetchPostDetail();  // 화면 로드 시 게시글 상세 정보를 불러옴
+    fetchPostDetail(); // 화면 로드 시 게시글 상세 정보를 불러옴
   }
 
   Future<void> fetchPostDetail() async {
@@ -30,7 +33,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
     if (response['result'] == 0) {
       var _post = response['json']['post'];
-      if(_post == null) {
+      if (_post == null) {
         toast("게시글을 찾을 수 없습니다.");
         Navigator.pop(context);
       } else {
@@ -38,8 +41,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         var postEmail = _post['email'];
         setState(() {
           post = _post; // API 응답 데이터 저장
+          comments = response['json']['comments']; // 댓글 리스트 불러오기
           isOwner = localEmail == postEmail;
-          isLoading = false;  // 로딩 완료
+          isLoading = false; // 로딩 완료
         });
       }
     } else {
@@ -47,6 +51,31 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       toast("게시글을 찾을 수 없습니다.");
       Navigator.pop(context);
     }
+  }
+
+  Future<void> submitComment() async {
+    String commentText = _commentController.text;
+    if (commentText.isEmpty) {
+      toast("댓글을 입력하세요.");
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    var email = await pref.getString(pref.KEY_LOGIN_EMAIL);
+    var json = {'comment':commentText, 'contentIdx': post['idx'], 'email': email};
+    var response = await api.request(url.COMMENT_SET, json);
+
+    if(response['result'] == 0) {
+      toast("댓글 등록 성공");
+    } else {
+      toast("댓글 등록 실패");
+    }
+
+    fetchPostDetail();
+    setState(() {
+      _commentController.clear(); // 댓글 입력 필드 비우기
+    });
   }
 
   @override
@@ -68,24 +97,70 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               // 게시글 삭제 로직 추가
             },
           ),
-        ]: null,  // 작성자가 아니면 actions를 숨김
+        ]
+            : null,
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())  // 로딩 중일 때 표시할 위젯
-          : Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              post['title'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Text(post['content']),
-          ],
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(  // 스크롤뷰로 전체 감싸기
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                post['title'],
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+              Text(post['content']),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _commentController,
+                      decoration: InputDecoration(
+                        labelText: '댓글을 입력하세요',
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: submitComment,
+                    child: Text('등록'),
+                  ),
+                ],
+              ),
+              ListView.builder(
+                shrinkWrap: true,  // ListView가 스크롤뷰 내에서 올바르게 작동하도록
+                physics: NeverScrollableScrollPhysics(),  // ListView의 스크롤을 비활성화
+                itemCount: comments.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),  // 댓글 간 간격 추가
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,  // comment와 date를 양 끝에 배치
+                      children: [
+                        Expanded(
+                          child: Text(
+                            comments[index]['comment'],  // 댓글 내용 표시
+                          ),
+                        ),
+                        SizedBox(width: 16),  // 간격 추가
+                        Text(
+                          comments[index]['date'] ?? '',  // 댓글 작성 날짜 표시
+                          style: TextStyle(fontSize: 12, color: Colors.grey),  // 작은 폰트로 날짜 표시
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-      )
+      ),
     );
   }
 }
