@@ -64,7 +64,7 @@ class _PostListScreenState extends State<PostListScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => PostDetailScreen(
-                    post: posts[index],
+                    postIdx: posts[index]['idx'],
                   ),
                 ),
               );

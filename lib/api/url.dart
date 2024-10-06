@@ -9,3 +9,5 @@ const String LOGIN = "book_forest_login.php";
 const String POST_LIST = "book_forest_post_list.php";
 // 게시글 생성
 const String POST_CREATE = "book_forest_post_create.php";
+// 게시글 정보
+const String POST_GET = "book_forest_get_post.php";
