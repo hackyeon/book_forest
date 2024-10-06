@@ -67,7 +67,9 @@ class _PostListScreenState extends State<PostListScreen> {
                     postIdx: posts[index]['idx'],
                   ),
                 ),
-              );
+              ).then((_) {
+                fetchPosts();
+              });
             },
           );
         },

@@ -11,5 +11,7 @@ const String POST_LIST = "book_forest_post_list.php";
 const String POST_CREATE = "book_forest_post_create.php";
 // 게시글 정보
 const String POST_GET = "book_forest_get_post.php";
+// 게시글 삭제
+const String POST_DELETE = "book_forest_delete_post.php";
 // 댓글 등록
 const String COMMENT_SET = "book_forest_set_comment.php";

@@ -78,6 +78,18 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     });
   }
 
+  Future<void> deletePost() async {
+    var json = {'idx': widget.postIdx};
+    var response = await api.request(url.POST_DELETE, json);
+
+    if(response['result'] == 0) {
+      toast(response['json']['message']);
+      Navigator.pop(context);
+    } else {
+      toast(response['message']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +106,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              // 게시글 삭제 로직 추가
+              deletePost();
             },
           ),
         ]
