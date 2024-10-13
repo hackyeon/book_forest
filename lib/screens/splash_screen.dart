@@ -34,12 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          '북숲',
-          style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Image.asset(
+          'assets/images/bookswage_logo.png',
         ),
       ),
     );
