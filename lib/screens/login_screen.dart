@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _codeController = TextEditingController();
   bool _isCodeSent = false;
+  bool _isEmailEditable = true;
 
   _sendVerificationCode() async {
     // 여기에 인증 코드 발송 API를 추가하세요.
@@ -27,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() {
       _isCodeSent = true;
+      _isEmailEditable = false;
     });
   }
 
@@ -52,6 +54,16 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // 메일 다시 적기 기능
+  _resetEmailInput() {
+    setState(() {
+      _isCodeSent = false;  // 인증 코드 입력 필드 숨김
+      _isEmailEditable = true;  // 이메일 다시 수정 가능하게 변경
+      _emailController.clear();  // 이메일 입력 필드 초기화
+      _codeController.clear();   // 인증 코드 필드 초기화
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,13 +75,21 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
+            // 이메일 입력 또는 텍스트로 변환된 이메일 표시
+            _isEmailEditable
+                ? TextField(
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: '이메일 입력',
               ),
+            )
+                : Text(
+              _emailController.text,
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 20),
+
+            // 인증 코드 입력 필드 (메일이 발송된 후에만 보임)
             if (_isCodeSent)
               TextField(
                 controller: _codeController,
@@ -82,6 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: _isCodeSent ? _verifyCode : _sendVerificationCode,
               child: Text(_isCodeSent ? '인증번호 확인' : '인증번호 발송'),
             ),
+            if (_isCodeSent)
+              TextButton(
+                onPressed: _resetEmailInput,
+                child: Text('메일 다시 적기'),
+              ),
           ],
         ),
       ),
