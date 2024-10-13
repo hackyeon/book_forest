@@ -1,3 +1,4 @@
+import 'package:book_forest/screens/post_create_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:book_forest/api/api.dart' as api;
 import 'package:book_forest/api/url.dart' as url;
@@ -100,7 +101,12 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // 게시글 수정 로직 추가
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PostCreateScreen(post: post)),
+              ).then((_) {
+                fetchPostDetail();
+              });
             },
           ),
           IconButton(

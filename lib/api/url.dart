@@ -15,3 +15,5 @@ const String POST_GET = "book_forest_get_post.php";
 const String POST_DELETE = "book_forest_delete_post.php";
 // 댓글 등록
 const String COMMENT_SET = "book_forest_set_comment.php";
+// 게시글 수정
+const String POST_UPDATE = "book_forest_post_update.php";
