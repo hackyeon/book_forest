@@ -71,6 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
         title: Center(
           child: Image.asset(
             'assets/images/bookswage_logo.png',
+            width: 100,
+            height: 38,
           ),
         ),
       ),
