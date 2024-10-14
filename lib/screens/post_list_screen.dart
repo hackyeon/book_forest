@@ -39,7 +39,11 @@ class _PostListScreenState extends State<PostListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('게시글 리스트'),
+        title: Center(
+          child: Image.asset(
+            'assets/images/bookswage_logo.png',
+          ),
+        ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())  // 로딩 중일 때 표시할 위젯

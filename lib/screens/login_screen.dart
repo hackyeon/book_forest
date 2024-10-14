@@ -68,8 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          'assets/images/bookswage_logo.png',
+        title: Center(
+          child: Image.asset(
+            'assets/images/bookswage_logo.png',
+          ),
         ),
       ),
       body: Padding(
