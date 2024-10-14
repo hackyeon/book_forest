@@ -62,7 +62,7 @@ class _PostCreateScreenState extends State<PostCreateScreen> {
       appBar: AppBar(
         title: Text(widget.post == null ? '게시글 작성' : '게시글 수정'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(  // 스크롤 가능하도록 SingleChildScrollView 추가
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,6 +71,10 @@ class _PostCreateScreenState extends State<PostCreateScreen> {
               controller: _titleController,
               decoration: InputDecoration(
                 labelText: '제목을 입력하세요',
+                border: OutlineInputBorder( // 테두리 추가
+                  borderRadius: BorderRadius.circular(10.0), // 둥근 테두리
+                  borderSide: BorderSide(color: Colors.grey), // 테두리 색상 설정
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -78,8 +82,14 @@ class _PostCreateScreenState extends State<PostCreateScreen> {
               controller: _contentController,
               decoration: InputDecoration(
                 labelText: '내용을 입력하세요',
+                alignLabelWithHint: true,  // 레이블을 항상 위쪽에 고정
+                border: OutlineInputBorder( // 테두리 추가
+                  borderRadius: BorderRadius.circular(10.0), // 둥근 테두리
+                  borderSide: BorderSide(color: Colors.grey), // 테두리 색상 설정
+                ),
               ),
-              maxLines: 5,
+              maxLines: null,  // maxLines를 null로 설정하여 줄 수 제한 없음 (자동으로 높이 조절)
+              minLines: 5,  // 최소 5줄 설정
             ),
             SizedBox(height: 20),
             ElevatedButton(
