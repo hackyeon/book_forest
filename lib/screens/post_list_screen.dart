@@ -1,3 +1,4 @@
+import 'package:book_forest/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'post_create_screen.dart';
 import 'post_detail_screen.dart';
@@ -46,6 +47,21 @@ class _PostListScreenState extends State<PostListScreen> {
             height: 38,
           ),
         ),
+        // 오른쪽에 버튼 추가
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings), // 설정 아이콘
+            onPressed: () {
+              // SettingScreen으로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingScreen()),
+              ).then((_) {
+                fetchPosts();
+              });
+            },
+          ),
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())  // 로딩 중일 때 표시할 위젯

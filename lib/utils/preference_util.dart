@@ -13,3 +13,8 @@ Future<String> getString(String key) async {
   String value = prefs.getString(key) ?? "";
   return value;
 }
+
+Future<void> removeString(String key) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(key);
+}
