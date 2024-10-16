@@ -79,6 +79,34 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     });
   }
 
+  void _deletePost() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('게시글 삭제'),
+          content: Text('게시글을 하시겠습니까?'),
+          actions: [
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                // 로그아웃 처리 로직을 여기에 추가
+                Navigator.of(context).pop();  // 다이얼로그 닫기
+                deletePost();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> deletePost() async {
     var json = {'idx': widget.postIdx};
     var response = await api.request(url.POST_DELETE, json);
@@ -112,7 +140,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              deletePost();
+              _deletePost();
             },
           ),
         ]
