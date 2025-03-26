@@ -32,6 +32,13 @@ class _PostListScreenState extends State<PostListScreen> {
     }
     setState(() {
       posts = response['json']['data'];
+      posts.sort((a, b) {
+        if(a['idx'] < b['idx']) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
       isLoading = false;
     });
   }
